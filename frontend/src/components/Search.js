@@ -1,5 +1,5 @@
-import React from "react";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import React from 'react';
+import { Container, Row, Col, Button, Form } from 'react-bootstrap';
 
 function Search({ word, setWord, handleSubmit }) {
   return (
@@ -19,7 +19,7 @@ function Search({ word, setWord, handleSubmit }) {
               <Col>
                 <Button variant="primary" type="submit">
                   Search
-                </Button>{" "}
+                </Button>{' '}
               </Col>
             </Form.Row>
           </Form>
