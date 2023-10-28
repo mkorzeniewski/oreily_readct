@@ -3,14 +3,14 @@ from requests import get
 import os
 from dotenv import dotenv_values
 
-app = Flask(__name__)
-
-config = dotenv_values(".env.local") 
-
 UNSPLASH_URL = "https://api.unsplash.com/photos/random/"
 
+config = dotenv_values(".env.local") 
 if not config["UNSPLASH_KEY"]:
     raise EnvironmentError("Missing Unsplash API Key")
+
+app = Flask(__name__)
+app.config["DEBUG"] = config["DEBUG"] == "True" if config["DEBUG"] else False
 
 @app.route("/new-images")
 def new_image():
