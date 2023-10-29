@@ -31,9 +31,10 @@ def new_image():
 
     return image.json()
 
-@app.route("/images")
-def images():
-    
+
+# @app.route("/images")
+# def images():
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5050)
