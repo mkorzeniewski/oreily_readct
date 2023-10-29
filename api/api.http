@@ -1,0 +1,11 @@
+###
+
+POST http://localhost:5050/images
+Content-Type: application/json
+
+{
+    "image": "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+}
+
+###
+GET http://localhost:5050/images

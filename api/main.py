@@ -1,6 +1,7 @@
 from dotenv import dotenv_values
-from flask import Flask, request
+from flask import Flask, jsonify, request
 from flask_cors import CORS
+from mongo_client import mongo_client
 from requests import get
 
 UNSPLASH_URL = "https://api.unsplash.com/photos/random/"
@@ -12,6 +13,9 @@ if not config["UNSPLASH_KEY"]:
 app = Flask(__name__)
 app.config["DEBUG"] = config["DEBUG"] == "True" if config["DEBUG"] else False
 CORS(app)
+
+db = mongo_client.gallery
+images_collection = db.images
 
 
 @app.route("/new-images")
@@ -32,8 +36,18 @@ def new_image():
     return image.json()
 
 
-# @app.route("/images")
-# def images():
+@app.route("/images", methods=["POST", "GET"])
+def images():
+    if request.method == "GET":
+        images_list = list(images_collection.find({}))
+        image: dict
+        for image in images_list:
+            del image["_id"]
+        return jsonify(list(images_list))
+    if request.method == "POST":
+        image = request.get_json()
+        images_collection.insert_one(image)
+        return jsonify({"message": "Image added successfully"})
 
 
 if __name__ == "__main__":
