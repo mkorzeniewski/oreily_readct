@@ -2,6 +2,7 @@ from flask import Flask, request
 from requests import get
 import os
 from dotenv import dotenv_values
+from flask_cors import CORS
 
 UNSPLASH_URL = "https://api.unsplash.com/photos/random/"
 
@@ -11,6 +12,7 @@ if not config["UNSPLASH_KEY"]:
 
 app = Flask(__name__)
 app.config["DEBUG"] = config["DEBUG"] == "True" if config["DEBUG"] else False
+CORS(app)
 
 @app.route("/new-images")
 def new_image():
@@ -20,6 +22,7 @@ def new_image():
         "accept-version": "v1"
         }
     image = get(UNSPLASH_URL, headers=headers, params={"query": word})
+    
     return image.json()
 
 
