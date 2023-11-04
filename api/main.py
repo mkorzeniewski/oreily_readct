@@ -38,6 +38,10 @@ def new_image():
 
 @app.route("/images", methods=["POST", "GET"])
 def images():
+    """
+    GET: Returns a list of all images in the images_collection.
+    POST: Adds a new image to the images_collection.
+    """
     if request.method == "GET":
         images_list = list(images_collection.find({}))
         image: dict
