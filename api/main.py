@@ -1,3 +1,5 @@
+from time import sleep
+
 from dotenv import dotenv_values
 from flask import Flask, jsonify, request
 from flask_cors import CORS
@@ -47,11 +49,26 @@ def images():
         image: dict
         for image in images_list:
             del image["_id"]
+        sleep(1)
         return jsonify(list(images_list))
     if request.method == "POST":
         image = request.get_json()
         images_collection.insert_one(image)
         return jsonify({"message": "Image added successfully"})
+
+
+@app.route("/images/<id>", methods=["DELETE"])
+def delete_image(id):
+    """
+    DELETE: Deletes an image from the images_collection.
+    """
+    if request.method == "DELETE":
+        res = images_collection.delete_one({"id": id})
+        if not res.acknowledged or not res:
+            return jsonify({"message": "Image not deleted"}), 500
+        if res.deleted_count == 0:
+            return jsonify({"message": "Image not found"}), 404
+        return jsonify({"message": "Image deleted successfully"})
 
 
 if __name__ == "__main__":
