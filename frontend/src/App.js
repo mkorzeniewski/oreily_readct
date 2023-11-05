@@ -26,6 +26,17 @@ function App() {
     getSavedImages();
   }, []);
 
+  async function handleSaveImage(id) {
+    const image = images.find((image) => image.id === id);
+    image.saved = true;
+    try {
+      const res = await axios.post(`${API_URL}/images`, image);
+      setImages(images.map((i) => (i.id === id ? { ...i, saved: true } : i)));
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async function handleSearchSubmit(e) {
     e.preventDefault();
     try {
@@ -51,7 +62,11 @@ function App() {
           <Row xs={1} md={2} lg={3}>
             {images.map((img, i) => (
               <Col key={i} className="pb-3">
-                <ImageCard image={img} deleteImage={deleteImage} />
+                <ImageCard
+                  image={img}
+                  deleteImage={deleteImage}
+                  saveImage={handleSaveImage}
+                />
               </Col>
             ))}
           </Row>
