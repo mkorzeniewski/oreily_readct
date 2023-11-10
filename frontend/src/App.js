@@ -7,6 +7,8 @@ import { Col, Container, Row } from 'react-bootstrap';
 import Welcome from './components/Welcome';
 import axios from 'axios';
 import WaitingSpinner from './components/Spinner';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5050';
 
@@ -14,6 +16,20 @@ function App() {
   const [word, setWord] = useState('');
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const notify = () => {
+    console.log('notify');
+    toast.info('Wow so easy !', {
+      position: 'top-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'light',
+    });
+  };
 
   async function getSavedImages() {
     try {
@@ -35,6 +51,7 @@ function App() {
     try {
       const res = await axios.post(`${API_URL}/images`, image);
       setImages(images.map((i) => (i.id === id ? { ...i, saved: true } : i)));
+      notify();
     } catch (err) {
       console.log(err);
     }
@@ -94,6 +111,7 @@ function App() {
           </Container>
         </>
       )}
+      <ToastContainer />
     </div>
   );
 }
